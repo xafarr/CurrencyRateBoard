@@ -1,0 +1,45 @@
+.row {
+  border-bottom: 1px solid #eeeeee;
+}
+
+[class^="col-md-"] {
+  border-right: 1px solid #eeeeee;
+}
+
+body, html, div.container-fluid {
+  height: 100%;
+  width: 100%;
+}
+
+.top-heading {
+  font-size: 52px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.datetime {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.essential-padding {
+  padding: 15px 30px 15px;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading-text {
+  font-weight: 300;
+  font-size: 30px;
+}
+
+.company-logo {
+  border-right: none;
+}
