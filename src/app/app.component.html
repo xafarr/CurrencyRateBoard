@@ -1,42 +1,26 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3 company-logo essential-padding">
-      <img src="../assets/images/logo.png" class="img-fluid align-center"
-           style="width: 70%" alt="Drift Exchange">
+  <div class="row" style="height: 10vh">
+    <div class="col-3 essential-padding align-center">
+      <img src="../assets/images/logo.png" class="img-fluid"
+           style="width: 100%;" alt="Drift Exchange">
     </div>
-    <div class="col-md-9 datetime">
-
+    <div class="col-6 align-center datetime-text">
+      {{clock | async}}
     </div>
+    <div class="col-3"></div>
   </div>
-  <div class="row">
-    <div class="col-md-12 top-heading align-center">
+  <div class="row" style="height: 10vh">
+    <div class="col-12 top-heading align-center">
       <div>Foreign Exchange Rates</div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-6 card-header align-center">
-      <div class="heading-text">Currency</div>
+  <rate-table></rate-table>
+  <div class="row card-footer fixed-bottom" style="min-height: 10vh">
+    <div class="col-12 footer-text align-center">
+      <div>No Fees and No Commission</div>
     </div>
-    <div class="col-md-3 card-header align-center">
-      <div class="heading-text">We buy at</div>
-    </div>
-    <div class="col-md-3 align-center card-header">
-      <div class="heading-text">We sell at</div>
-    </div>
-  </div>
-  <div class="row" *ngFor="let i of arr">
-    <div class="col-md-6 essential-padding">Curr</div>
-    <div class="col-md-3 align-center essential-padding">Buy Rate</div>
-    <div class="col-md-3 align-center essential-padding">Sell Rate</div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 card-footer align-center" style="height: 100px">
-      <h2>No Fees and No Commission</h2>
-    </div>
-  </div>
-  <div class="row" id="disclaimer">
-    <div class="col-md-12 card-footer align-center">
-      <div>All rates subject to change without notice</div>
+    <div class="col-12 disclaimer-footer align-center">
+      <div>All rates are subject to change without notice</div>
     </div>
   </div>
 </div>

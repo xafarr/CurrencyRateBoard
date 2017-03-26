@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+body, html {
+  width: 100vw;
+  height: 100vh;
+  color: #464a4c;
+}
+
+.row {
+  border-bottom: 1px solid #eeeeee;
+}

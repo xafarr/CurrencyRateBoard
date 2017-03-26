@@ -1,27 +1,6 @@
-.row {
-  border-bottom: 1px solid #eeeeee;
-}
-
-[class^="col-md-"] {
-  border-right: 1px solid #eeeeee;
-}
-
-body, html, div.container-fluid {
-  height: 100%;
-  width: 100%;
-}
-
 .top-heading {
-  font-size: 52px;
+  font-size: 6vmin;
   font-weight: 400;
-  text-align: center;
-}
-
-.datetime {
-  text-align: right;
-}
-
-.text-center {
   text-align: center;
 }
 
@@ -35,11 +14,22 @@ body, html, div.container-fluid {
   align-items: center;
 }
 
-.heading-text {
+.footer-text {
   font-weight: 300;
-  font-size: 30px;
+  font-size: 4vmin;
 }
 
 .company-logo {
   border-right: none;
+}
+
+.disclaimer-footer {
+  font-weight: 100;
+  font-size: 1.5vmin;
+}
+
+.datetime-text {
+  font-weight: 300;
+  font-size: 2vmin;
+  text-wrap: none;
 }
