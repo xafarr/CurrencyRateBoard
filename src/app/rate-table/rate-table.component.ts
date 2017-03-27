@@ -1,6 +1,6 @@
-import {Component, OnInit, OnDestroy} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {CurrencyRateService} from "../services/currency-rate.service";
-import {Observable, Subscription} from "rxjs";
+import {Observable} from "rxjs";
 import {Currency} from "../model/currency";
 import {CurrencyPairRates} from "../model/currency-pair-rates";
 
@@ -38,9 +38,11 @@ export class RateTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.intervalId = setInterval(() => {
+    let updateCurrencyRates = () => {
       this._results = this.currencyRateService.getUpdatedCurrencyRates("AUD", this.quoteCurrencies);
-    }, 900000);
+    };
+    updateCurrencyRates();
+    this.intervalId = setInterval(updateCurrencyRates, 900000);
   }
 
   ngOnDestroy(): void {
