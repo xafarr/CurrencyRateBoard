@@ -9,8 +9,7 @@ import {CurrencyPairRates} from "../model/currency-pair-rates";
 export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates> {
 
   private _apiRoot: string = "https://apilayer.net/api/live";
-  private _accessKey: string = "b18abf4e7081ba3dcaeaf584406a6931";
-  private _baseCurrency: Currency = new Currency("USD", "US$", "US Dollar", "$", 0, 0, 0);
+  private _accessKey: string = "abd994efabf12e4d576452a55240dd80";
   private _search: URLSearchParams;
   private _requestOptions: RequestOptions;
 
@@ -19,15 +18,25 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
     this._requestOptions = requestOptions;
   }
 
-  getUpdatedCurrencyRates(quoteCurrencyCodes: string[]): Observable<CurrencyPairRates[]> {
+  getUpdatedCurrencyRates(baseCurrencyCode: string, quoteCurrencyCodes: string[]): Observable<CurrencyPairRates[]> {
     this.search.set("access_key", this.accessKey);
-    this.search.set("source", this.baseCurrency.code);
+    this.search.set("source", baseCurrencyCode);
     this.search.set("currencies", quoteCurrencyCodes.join());
     this._requestOptions.search = this.search;
 
     return this.http.get('assets/data/currency.json')
       .switchMap(res => {
         let currenciesJson = res.json();
+        let baseCurrencyJson = currenciesJson[baseCurrencyCode];
+        let baseCurrency;
+        if (baseCurrencyJson) {
+          baseCurrency = new Currency(
+            baseCurrencyJson.code,
+            baseCurrencyJson.symbol,
+            baseCurrencyJson.name,
+            baseCurrencyJson.symbol_native, 0, 0, 0);
+        }
+
         return this.http.get(this.apiRoot, this.requestOptions)
           .map(res => {
             let currencyQuotes = res.json();
@@ -37,7 +46,7 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
               for (let ccy of quoteCurrencyCodes) {
                 let quoteCurrencyJson = currenciesJson[ccy];
                 let timestamp = currencyQuotes.timestamp;
-                let spotRate = currencyQuotes.quotes[this.baseCurrency.code + quoteCurrencyJson.code];
+                let spotRate = currencyQuotes.quotes[baseCurrencyCode + quoteCurrencyJson.code];
                 let supplierBuyRate = spotRate + (quoteCurrencyJson.supp_perc / 100 * spotRate);
                 let supplierSellRate = spotRate - (quoteCurrencyJson.supp_perc / 100 * spotRate);
                 let buyRate = spotRate + (quoteCurrencyJson.buy_profit_perc / 100 * spotRate);
@@ -55,7 +64,7 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
                   quoteCurrencyJson.name_plural
                 );
                 let temp = new CurrencyPairRates(
-                  this.baseCurrency,
+                  baseCurrency,
                   quoteCurrency,
                   timestamp,
                   spotRate,
@@ -80,15 +89,6 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
 
   get accessKey(): string {
     return this._accessKey;
-  }
-
-
-  get baseCurrency(): Currency {
-    return this._baseCurrency;
-  }
-
-  set baseCurrency(value: Currency) {
-    this._baseCurrency = value;
   }
 
   get search(): URLSearchParams {
