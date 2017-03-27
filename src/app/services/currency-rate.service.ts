@@ -8,7 +8,7 @@ import {CurrencyPairRates} from "../model/currency-pair-rates";
 @Injectable()
 export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates> {
 
-  private _apiRoot: string = "http://apilayer.net/api/live";
+  private _apiRoot: string = "https://apilayer.net/api/live";
   private _accessKey: string = "b18abf4e7081ba3dcaeaf584406a6931";
   private _baseCurrency: Currency = new Currency("USD", "US$", "US Dollar", "$", 0, 0, 0);
   private _search: URLSearchParams;
