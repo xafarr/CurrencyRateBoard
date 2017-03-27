@@ -32,37 +32,42 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
           .map(res => {
             let currencyQuotes = res.json();
             let currencyPairRatesList = [];
-            for (let ccy of quoteCurrencyCodes) {
-              let quoteCurrencyJson = currenciesJson[ccy];
-              let timestamp = currencyQuotes.timestamp;
-              let spotRate = currencyQuotes.quotes[this.baseCurrency.code + quoteCurrencyJson.code];
-              let supplierBuyRate = spotRate + (quoteCurrencyJson.supp_perc / 100 * spotRate);
-              let supplierSellRate = spotRate - (quoteCurrencyJson.supp_perc / 100 * spotRate);
-              let buyRate = spotRate + (quoteCurrencyJson.buy_profit_perc / 100 * spotRate);
-              let sellRate = spotRate - (quoteCurrencyJson.sell_profit_perc / 100 * spotRate);
-              let quoteCurrency = new Currency(
-                quoteCurrencyJson.code,
-                quoteCurrencyJson.symbol,
-                quoteCurrencyJson.name,
-                quoteCurrencyJson.symbol_native,
-                quoteCurrencyJson.supp_perc,
-                quoteCurrencyJson.buy_profit_perc,
-                quoteCurrencyJson.sell_profit_perc,
-                quoteCurrencyJson.decimal_digits,
-                quoteCurrencyJson.rounding,
-                quoteCurrencyJson.name_plural
-              );
-              let temp = new CurrencyPairRates(
-                this.baseCurrency,
-                quoteCurrency,
-                timestamp,
-                spotRate,
-                supplierBuyRate,
-                supplierSellRate,
-                buyRate,
-                sellRate
-              );
-              currencyPairRatesList.push(temp);
+
+            if (currencyQuotes.success) {
+              for (let ccy of quoteCurrencyCodes) {
+                let quoteCurrencyJson = currenciesJson[ccy];
+                let timestamp = currencyQuotes.timestamp;
+                let spotRate = currencyQuotes.quotes[this.baseCurrency.code + quoteCurrencyJson.code];
+                let supplierBuyRate = spotRate + (quoteCurrencyJson.supp_perc / 100 * spotRate);
+                let supplierSellRate = spotRate - (quoteCurrencyJson.supp_perc / 100 * spotRate);
+                let buyRate = spotRate + (quoteCurrencyJson.buy_profit_perc / 100 * spotRate);
+                let sellRate = spotRate - (quoteCurrencyJson.sell_profit_perc / 100 * spotRate);
+                let quoteCurrency = new Currency(
+                  quoteCurrencyJson.code,
+                  quoteCurrencyJson.symbol,
+                  quoteCurrencyJson.name,
+                  quoteCurrencyJson.symbol_native,
+                  quoteCurrencyJson.supp_perc,
+                  quoteCurrencyJson.buy_profit_perc,
+                  quoteCurrencyJson.sell_profit_perc,
+                  quoteCurrencyJson.decimal_digits,
+                  quoteCurrencyJson.rounding,
+                  quoteCurrencyJson.name_plural
+                );
+                let temp = new CurrencyPairRates(
+                  this.baseCurrency,
+                  quoteCurrency,
+                  timestamp,
+                  spotRate,
+                  supplierBuyRate,
+                  supplierSellRate,
+                  buyRate,
+                  sellRate
+                );
+                currencyPairRatesList.push(temp);
+              }
+            } else {
+              console.error(`Error-${currencyQuotes.error.code}: ${currencyQuotes.error.info}`);
             }
             return currencyPairRatesList;
           })
@@ -94,7 +99,7 @@ export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates
     this._search = value;
   }
 
- /* get quoteCurrencies(): Array<string> {
-    return this._quoteCurrencies;
-  }*/
+  /* get quoteCurrencies(): Array<string> {
+   return this._quoteCurrencies;
+   }*/
 }
