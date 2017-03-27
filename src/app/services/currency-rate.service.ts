@@ -9,7 +9,7 @@ import {CurrencyPairRates} from "../model/currency-pair-rates";
 export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates> {
 
   private _apiRoot: string = "https://apilayer.net/api/live";
-  private _accessKey: string = "abd994efabf12e4d576452a55240dd80";
+  private _accessKey: string = "4dd9d8970787d53bd1a1193244fe65e1";
   private _search: URLSearchParams;
   private _requestOptions: RequestOptions;
 
