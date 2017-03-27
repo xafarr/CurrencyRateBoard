@@ -12,7 +12,6 @@ import {CurrencyPairRates} from "../model/currency-pair-rates";
 })
 export class RateTableComponent implements OnInit, OnDestroy {
   private intervalId: any;
-  private _subscription: Subscription;
   private _results: Observable<CurrencyPairRates[]>;
   private _maxCurrencyRows: number = 12;
   private _mappingFunction = (jsonResponseData) => {
@@ -39,18 +38,13 @@ export class RateTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.intervalId = setInterval(, 60000);
-    this._results = this.currencyRateService.getUpdatedCurrencyRates("AUD", this.quoteCurrencies);
+    this.intervalId = setInterval(() => {
+      this._results = this.currencyRateService.getUpdatedCurrencyRates("AUD", this.quoteCurrencies);
+    }, 900000);
   }
 
   ngOnDestroy(): void {
     clearInterval(this.intervalId);
-    this.subscription.unsubscribe();
-  }
-
-
-  get subscription(): Subscription {
-    return this._subscription;
   }
 
   get maxCurrencyRows(): number {
