@@ -14,8 +14,8 @@ export class AppComponent {
   clock: Observable<string>;
 
   constructor(private windowObject: WindowRef, private clockService: ClockService) {
-    console.log(windowObject.nativeWindow.innerWidth);
-    console.log(windowObject.nativeWindow.innerHeight);
+    // console.log(windowObject.nativeWindow.innerWidth);
+    // console.log(windowObject.nativeWindow.innerHeight);
 
     this.clock = Observable
       .interval(1000)
