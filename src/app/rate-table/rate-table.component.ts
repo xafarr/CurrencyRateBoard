@@ -42,7 +42,7 @@ export class RateTableComponent implements OnInit, OnDestroy {
       this._results = this.currencyRateService.getUpdatedCurrencyRates("AUD", this.quoteCurrencies);
     };
     updateCurrencyRates();
-    this.intervalId = setInterval(updateCurrencyRates, 900000);
+    this.intervalId = setInterval(updateCurrencyRates, 3600000);
   }
 
   ngOnDestroy(): void {
