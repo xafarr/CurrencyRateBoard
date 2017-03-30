@@ -19,7 +19,8 @@ span {
 }
 
 td {
-  padding: 0px;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .thead-inverse th {
@@ -30,8 +31,4 @@ td {
   font-weight: 300;
   font-size: 3vmin;
   text-wrap: none;
-}
-
-td {
-  vertical-align: middle;
 }
