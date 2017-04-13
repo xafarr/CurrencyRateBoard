@@ -7,79 +7,50 @@ import {CurrencyPairRates} from "../model/currency-pair-rates";
 
 @Injectable()
 export class CurrencyRateService implements RatesUpdateService<CurrencyPairRates> {
-
   private _apiRoot: string = "https://apilayer.net/api/live";
   private _accessKey: string = "4dd9d8970787d53bd1a1193244fe65e1";
   private _search: URLSearchParams;
-  private _requestOptions: RequestOptions;
 
   constructor(private http: Http, private requestOptions: RequestOptions) {
     this.search = new URLSearchParams();
-    this._requestOptions = requestOptions;
   }
 
-  getUpdatedCurrencyRates(baseCurrencyCode: string, quoteCurrencyCodes: string[]): Observable<CurrencyPairRates[]> {
+  getUpdatedCurrencyRates(baseCurrency: Currency, quoteCurrencies: Currency[]): Observable<CurrencyPairRates[]> {
     this.search.set("access_key", this.accessKey);
-    this.search.set("source", baseCurrencyCode);
-    this.search.set("currencies", quoteCurrencyCodes.join());
-    this._requestOptions.search = this.search;
+    this.search.set("source", baseCurrency.code);
+    this.search.set("currencies", quoteCurrencies.map(ccy => ccy.code).join(","));
+    this.requestOptions.search = this.search;
 
-    return this.http.get('assets/data/currency.json')
-      .switchMap(res => {
-        let currenciesJson = res.json();
-        let baseCurrencyJson = currenciesJson[baseCurrencyCode];
-        let baseCurrency;
-        if (baseCurrencyJson) {
-          baseCurrency = new Currency(
-            baseCurrencyJson.code,
-            baseCurrencyJson.symbol,
-            baseCurrencyJson.name,
-            baseCurrencyJson.symbol_native, 0, 0, 0);
+    return this.http.get(this.apiRoot, this.requestOptions)
+      .map(res => {
+        let currencyQuotes = res.json();
+        let currencyPairRatesList = [];
+
+        if (currencyQuotes.success) {
+          for (let quoteCurrency of quoteCurrencies) {
+            let timestamp = currencyQuotes.timestamp;
+            let spotRate = currencyQuotes.quotes[baseCurrency.code + quoteCurrency.code];
+            let supplierBuyRate = spotRate + (quoteCurrency.supplierPercentage / 100 * spotRate);
+            let supplierSellRate = spotRate - (quoteCurrency.supplierPercentage / 100 * spotRate);
+            let buyRate = spotRate + (quoteCurrency.buyPercentage / 100 * spotRate);
+            let sellRate = spotRate - (quoteCurrency.sellPercentage / 100 * spotRate);
+
+            let temp = new CurrencyPairRates(
+              baseCurrency,
+              quoteCurrency,
+              timestamp,
+              spotRate,
+              supplierBuyRate,
+              supplierSellRate,
+              buyRate,
+              sellRate
+            );
+            currencyPairRatesList.push(temp);
+          }
+        } else {
+          console.error(`Error-${currencyQuotes.error.code}: ${currencyQuotes.error.info}`);
         }
-
-        return this.http.get(this.apiRoot, this.requestOptions)
-          .map(res => {
-            let currencyQuotes = res.json();
-            let currencyPairRatesList = [];
-
-            if (currencyQuotes.success) {
-              for (let ccy of quoteCurrencyCodes) {
-                let quoteCurrencyJson = currenciesJson[ccy];
-                let timestamp = currencyQuotes.timestamp;
-                let spotRate = currencyQuotes.quotes[baseCurrencyCode + quoteCurrencyJson.code];
-                let supplierBuyRate = spotRate + (quoteCurrencyJson.supp_perc / 100 * spotRate);
-                let supplierSellRate = spotRate - (quoteCurrencyJson.supp_perc / 100 * spotRate);
-                let buyRate = spotRate + (quoteCurrencyJson.buy_profit_perc / 100 * spotRate);
-                let sellRate = spotRate - (quoteCurrencyJson.sell_profit_perc / 100 * spotRate);
-                let quoteCurrency = new Currency(
-                  quoteCurrencyJson.code,
-                  quoteCurrencyJson.symbol,
-                  quoteCurrencyJson.name,
-                  quoteCurrencyJson.symbol_native,
-                  quoteCurrencyJson.supp_perc,
-                  quoteCurrencyJson.buy_profit_perc,
-                  quoteCurrencyJson.sell_profit_perc,
-                  quoteCurrencyJson.decimal_digits,
-                  quoteCurrencyJson.rounding,
-                  quoteCurrencyJson.name_plural
-                );
-                let temp = new CurrencyPairRates(
-                  baseCurrency,
-                  quoteCurrency,
-                  timestamp,
-                  spotRate,
-                  supplierBuyRate,
-                  supplierSellRate,
-                  buyRate,
-                  sellRate
-                );
-                currencyPairRatesList.push(temp);
-              }
-            } else {
-              console.error(`Error-${currencyQuotes.error.code}: ${currencyQuotes.error.info}`);
-            }
-            return currencyPairRatesList;
-          })
+        return currencyPairRatesList;
       });
   }
 

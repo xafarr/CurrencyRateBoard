@@ -5,7 +5,8 @@
 
 .content-text {
   font-weight: 600;
-  font-size: 3vmin;
+  font-size: 4vmin;
+  white-space: nowrap;
 }
 
 .content-div {
@@ -34,5 +35,5 @@ td {
 }
 
 .rates-text {
-  font-size: 4vmin;
+  /*font-size: 4vmin;*/
 }

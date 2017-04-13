@@ -6,6 +6,7 @@ import {AppComponent} from "./app.component";
 import {WindowRef} from "./utils/window-ref";
 import {ClockService} from "./services/clock.service";
 import {RateTableComponent} from "./rate-table/rate-table.component";
+import {CurrencyService} from "./services/currency.service";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import {RateTableComponent} from "./rate-table/rate-table.component";
     FormsModule,
     HttpModule
   ],
-  providers: [WindowRef, ClockService],
+  providers: [WindowRef, ClockService, CurrencyService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
