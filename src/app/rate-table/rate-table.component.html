@@ -7,12 +7,12 @@
       <th class="text-center heading-text">We sell at</th>
     </tr>
     </thead>
-    <tbody class="content-text">
+    <tbody class="content">
     <tr *ngFor="let currency of results | async | slice:0:12">
       <td>
-        <div style="display: flex; padding-left: 2vw">
+        <div style="display: flex; padding-left: 2vw;">
           <span class="flag-icon flag-icon-{{ currency.quoteCcy.code.slice(0,2) | lowercase }}"></span>
-          <span>&nbsp; {{ currency.quoteCcy.code }} - {{ currency.quoteCcy.name }}</span>
+          <span class="content-text">&nbsp; {{ currency.quoteCcy.code }} - {{ currency.quoteCcy.name }}</span>
         </div>
       </td>
       <td class="rates-text">{{ currency.buyRate | number: '1.4-4' }}</td>

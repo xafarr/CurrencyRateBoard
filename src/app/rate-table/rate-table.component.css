@@ -1,9 +1,9 @@
 .flag-icon {
-  line-height: 1.5em;
-  width: 1.999999999em;
+  line-height: 2em;
+  width: 2.66666666667em;
 }
 
-.content-text {
+.content {
   font-weight: 600;
   font-size: 4vmin;
   white-space: nowrap;
@@ -21,6 +21,7 @@ span {
 
 td {
   padding: 0;
+  margin: 0;
   vertical-align: middle;
 }
 
@@ -36,4 +37,11 @@ td {
 
 .rates-text {
   /*font-size: 4vmin;*/
+}
+
+.content-text {
+  font-size: 3vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

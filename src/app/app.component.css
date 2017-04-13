@@ -30,5 +30,5 @@
 .datetime-text {
   font-weight: 300;
   font-size: 2vmin;
-  text-wrap: none;
+  white-space: nowrap;
 }
