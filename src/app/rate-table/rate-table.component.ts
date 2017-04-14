@@ -20,7 +20,7 @@ export class RateTableComponent implements OnInit, OnDestroy {
   private _supportedCurrenciesMap: Map<string, Currency>;
   private _selectedCurrencies: string[] =
     ["USD", "EUR", "GBP", "CAD", "CNY", "HKD",
-      "SGD", "JPY", "NZD", "THB", "CHF", "FJD"];
+      "SGD", "NZD", "JPY", "THB", "CHF", "FJD"];
 
   constructor(private currencyService: CurrencyService, private currencyRateService: CurrencyRateService) {
   }
